@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Copyright (C) 2025 pdnguyen of HCMC University of Technology
 # Sierra release
 # Source Code License Grant: The authors hereby grant to Licensee 

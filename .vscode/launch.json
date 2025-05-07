@@ -6,7 +6,7 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/os",
-      "args": ["mem1"],
+      "args": ["os_1_mlq_paging_small_1K"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
