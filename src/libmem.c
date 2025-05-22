@@ -240,6 +240,7 @@ int pg_getpage(struct mm_struct *mm, int pgn, int *fpn, struct pcb_t *caller)
     pte_set_swap(&mm->pgd[vicfpn], 0, swpfpn);
     pte_set_fpn(&mm->pgd[pgn], vicfpn);
     enlist_pgn_node(&caller->mm->fifo_pgn, pgn);
+    // MEMPHY_put_freefp(caller->active_mswp, tgtfpn);
   }
 
   *fpn = PAGING_FPN(mm->pgd[pgn]);
@@ -482,13 +483,26 @@ int free_pcb_memph(struct pcb_t *caller)
 int find_victim_page(struct mm_struct *mm, int *retpgn)
 {
   struct pgn_t *pg = mm->fifo_pgn;
-  if (pg == NULL)
-    return -1;
-  
+
+  if (!pg->pg_next) 
+  {
+    *retpgn = pg->pgn;
+    mm->fifo_pgn = pg->pg_next;
+  }
+
+  struct pgn_t *pre = NULL;
+
+  while (pg->pg_next) 
+  {
+    pre = pg;
+    pg = pg->pg_next;
+  }
+
   *retpgn = pg->pgn;
-  mm->fifo_pgn = pg->pg_next;
+  pre->pg_next = NULL;
+
   free(pg);
-  
+
   return 0;
 }
 
